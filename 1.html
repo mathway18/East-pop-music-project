@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Article Structure: The Attraction of Pop Music Fragments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .article-structure {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .article-title {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .article-title h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .article-section {
+            background-color: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            margin-bottom: 20px; /* Reduced margin for a more compact look */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .article-section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0; /* Match section border radius */
+        }
+        
+        .article-section.expanded .section-header {
+             border-bottom: 1px solid #e8e8e8;
+        }
+
+        .article-section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6em;
+            color: #34495e;
+            margin: 0;
+            /* Removed border-bottom and ::before styling, handled by .section-header now */
+        }
+
+        .toggle-icon {
+            font-size: 1.8em;
+            color: #3498db;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .article-section.expanded .toggle-icon {
+            transform: rotate(45deg); /* Changes + to a slight x or can be '-' */
+        }
+
+
+        .content {
+            padding: 0 25px; /* Add padding for collapsed state if any visible elements were inside */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out; /* Smooth transition for expand/collapse */
+            color: #555;
+        }
+
+        .article-section.expanded .content {
+            padding: 20px 25px; /* Padding when expanded */
+            max-height: 2000px; /* Adjust as needed, should be larger than any content block */
+            transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+        }
+
+
+        .content p, .content ul, .content .example, .content .summary-box {
+            margin-bottom: 15px;
+        }
+
+        .content ul {
+            padding-left: 20px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+        }
+
+        .subsection {
+            margin-left: 10px;
+            padding-left: 20px;
+            border-left: 3px solid #aed6f1;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .subsection h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3em;
+            color: #2980b9;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 6px;
+        }
+
+        .image-container img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+        }
+
+        .image-container figcaption {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .example {
+            padding: 12px;
+            background-color: #eaf2f8;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .example p {
+            margin: 0;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+
+        .summary-box {
+            font-style: italic;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #f39c12;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .reference-list li {
+            word-break: break-word;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .article-structure {
+                padding: 15px;
+            }
+            .article-title h1 {
+                font-size: 1.8em;
+            }
+            .article-section h2 { /* Now refers to h2 inside .section-header */
+                font-size: 1.4em;
+            }
+            .section-header {
+                padding: 15px 20px;
+            }
+            .article-section.expanded .content {
+                 padding: 15px 20px;
+            }
+            .subsection h3 {
+                font-size: 1.15em;
+            }
+            .image-container img {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-structure">
+        <header class="article-title">
+            <h1>The attraction of pop music fragments under the wave of short videos</h1>
+        </header>
+
+        <section id="introduction" class="article-section">
+            <div class="section-header">
+                <h2>Introduction</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="content">
+                <p>In recent years, short video platforms represented by Douyin have catalyzed many "Douyin hits" in mainland China. These songs are different from the popular songs promoted by radio stations or record companies in the traditional sense. Most of them have achieved viral spread on the Internet with a 15-second music clip (i.e., "hook") in a short video. From the magical hand gesture dance music Learn to Meow to the rap hit Wild Wolf Disco, to the brainwashing lyrical song Youth, a series of songs have become popular because they were selected as background music for short videos. This article examines popular music clips on the TikTok platform, deeply analyzes the musical structure and distribution mechanism of these 15-second hooks and explores the formula behind them. At the same time, we explore how the algorithmic recommendation of short videos affects music creation, and how this "short-term melodic thinking" changes the creative ecology of Chinese pop music. We also compare the TikTok music phenomenon with the broader field of East Asian pop music. Combining the theories learned in class such as "popular music language structure", "cyclic melody", and "industry formula", this study conducts a comprehensive analysis of the melodic language of TikTok's popular song hooks.</p>
+                <figure class="image-container">
+                    <img src="https://www.inewsweek.cn/data/upload/image/20220214/1644828693139756.jpg" alt="Picture1: the anchor is singing Douyin pop music">
+                    <figcaption>Picture1: the anchor is singing Douyin pop music. <a href="https://www.inewsweek.cn/survey/2022-02-14/15052.shtml?utm_source" target="_blank">Source</a></figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section id="musical-language" class="article-section">
+            <div class="section-header">
+                <h2>Musical language characteristics of short video hooks</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="content">
+                <p>The reason why Douyin's 15-second hook is so brainwashing is that the common characteristics of its musical language are related to the popular music used in the hook. These short musical works often follow certain "industrial formulas" in melody and arrangement. Combining the teaching content and relevant materials, I summarized the common musical characteristics of Douyin Hook as follows:</p>
+                
+                <div class="subsection">
+                    <h3>Simple harmony and loop</h3>
+                    <p>The key to the catchiness of Douyin's viral hits often lies in their simple harmonic arrangements. The core of many viral clips is typically formed by the cyclical repetition of just a few chords. Among these, four-chord progressions like I−V−vi−IV are particularly common, often running through the entire piece. This minimalist harmonic design makes melodic segments sound more familiar, readily fostering a positive reception from listeners, thereby becoming deeply ingrained in their memory and gaining widespread acceptance. Moreover, this use of looped harmonies is inherently well-suited to the need for seamless background music looping on short-video platforms.</p>
+                    <figure class="image-container">
+                        <img src="https://via.placeholder.com/600x300.png?text=Picture2:+Harmony+Analysis+(Replace+Me)" alt="Picture2: Harmony analysis of TikTok's popular songs">
+                        <figcaption>Picture2：It shows the harmony analysis of the international version of TikTok's popular songs. From it, we can see the chord characteristics of short video music around the world, it reflects some characteristics of Chinese Douyin. The chords used in the popular songs on the short video platform are more limited, mainly based on the chords within the basic harmonic scale, and the music structure is very simple.</figcaption>
+                    </figure>
+                    <div class="example">
+                        <p>Here is an example of this: <a href="https://www.douyin.com/video/6564996818420108547?modeFrom=searchResult" target="_blank">(click this link to see the video)</a></p>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>The melody is catchy and repetitive</h3>
+                    <p>The melody of short video pop music is usually rhythmic and relatively simple, making the song catchy and repetitive. One of the most common techniques is to repeat a simple tune or sentence to "brainwash" the audience. For example, the chorus melody of Learn to Meow（《学猫叫》） repeats "meow meow meow" at almost the same pitch; the chorus of Youth（《少年》） repeatedly plays "I am still the boy I used to be", and the short sound repeatedly emphasizes the theme "youth". Such type of repeated sound is most in Douyin pop music. Traditional pop music's highlight often appears after 1 minute; however, the promotion method of short video hooks is that the music usually plays directly or enters the climax or memorable part in several seconds. The melody is usually smooth and easy to hum, which is consistent with the public's aesthetic habits, and avoid being too complex or advanced.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Rhythm and card point design</h3>
+                    <p>Douyin short video pop music usually uses its clear beats to match video editing or dance for card points. For example, the drum beats of the rap Wild Wolf Disco in the hook part are relatively strong, and the beat points and accents of the beats are very clear, which allows video creators to synchronize the beats of the lyrics in the climax part "Come to the left and draw a dragon with me, and draw a rainbow on your right" or dance. Another example is Mang Zhong, it adds EDM drumbeats in the chorus, which can usually match the music beat with the people‘s action or dance in the video. These features require that the hook beat is very regular (mostly 4/4 beats), and the music speed is moderate. This card points design gives people a strong sense of rhythm, achieving synchronization between vision and hearing, also making music and short videos integrated with each other.</p>
+                    <div class="example">
+                        <p>Here is an example: <a href="https://www.douyin.com/video/6731384358948654343?modeFrom=searchResult" target="_blank">(click this link to see the video)</a></p>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>The lyrics is short and simple, easy to spread</h3>
+                    <p>Highly repeated and highly resonant lyrics is the important element that attract listeners. Some pop music of Douyin often just has one or two lines that is used frequently, like the line “Love you walking alone in the dark alley” （ “爱你孤身走暗巷” in Chinese）in the song Warrier of the darkness and “Love like fire” (“爱如火” in Chinese) in the song Love like fire. Such lyrics is lack of depth or story logics, it just conveys an emotion point by a few direct and simple lyrics, which listeners do not need to figure the lyrics out. Such design is more in line with the fragmented attention of short video users.</p>
+                </div>
+                
+                <div class="summary-box">
+                    <p>In summary, the formula of short video pop music can be summarized as: simple chord loop + highly repetitive and catchy melody + distinct rhythm + simple and magical lyrics. Popular music of Douyin use this element to compose song to “brainwash” listeners in a very short time, firmly attract their ears.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="case-study" class="article-section">
+            <div class="section-header">
+                 <h2>Case Study: Typical Formula for the Hook of a TikTok Hit</h2>
+                 <span class="toggle-icon">+</span>
+            </div>
+            <div class="content">
+                <p>Mang Zhong (2019), ancient style electronic pop music. It is a song that integrate Chinese traditional style and electronic beat. The chorus "Missing the ancient times..." adds electronic dance music drums to cause a rhythmic dance challenge. Countless users on Douyin use the hook of Mang Zhong as background music to perform ancient dances or break beat special effects, resulting in a huge amount of viewing. Its chord cycle is still simple (repeated Am-G-F-E), the melody is melodious and easy to hum, and the lyrics are full of the artistic conception of ancient poetry but simple and catchy. Mang Zhong has both oriental charm and brainwashing rhythm, which conforms to the trend of the rise of Chinese style culture on short video platforms.</p>
+            </div>
+        </section>
+
+        <section id="algorithmic-impact" class="article-section">
+            <div class="section-header">
+                <h2>The impact of algorithmic mechanisms: explosive formula and creative ecosystem</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="content">
+                <p>Tik Tok's intelligent recommendation algorithm played a role in fueling the popularity of the pop song hook. However, the spread way powered by algorithm also profoundly affects the way that music is produced, shaping a creative ecology of "short-term melody thinking".</p>
+                
+                <div class="subsection">
+                    <h3>The algorithm preference decides the creative orientation.</h3>
+                    <p>Douyin’s decentralized recommendation gives any song a chance to be exposed, but the actual recommendation prefers content that can attracts users. In music area, this means that the first several seconds of eye-catching part becomes the key to determine the fate of the song. In order to please the algorithm, creators begin to put chorus hooks or create highlights in the early part of the song. For example, many songs start directly from the chorus, shortening the prelude to prevent users from sliding away in the short video. For example, songs like Love you at 105 degrees (《热爱105度的你》in Chinese) ， Green （《绿色》 in Chinese） and summer wind (《夏天的风》 in Chinese) all take the way. (夏天 绿色 热爱105度的你) Such change increases the completion rate of short videos, but it compresses the structural tension of traditional songs. Industry insiders pointed out that the songs that became popular on Douyin often enter the climax within 30 seconds, which is much faster than traditional pop songs. Over time, the musicians form a mindset: a song must have a "golden sentence" or "divine melody" that can be cut into a 15-second highlight clip, otherwise it is difficult to become popular. This leads music creation to a formula routine. Some songwriters admit that they now often "write songs that are popular" and "mass produce" music according to some routines of Douyin's popular songs, resulting in content homogeneity and rampant plagiarism and template copying (woshipm.com). For example, Simple happiness was popular in Douyin before, the music was pointed that the chorus melody is highly similar to the Why not (《有何不可》 in Chinese), which is almost a paste. The tendency of algorithms to pursue “Traffic is king” is killing the diversity of music creation. （简单的幸福）</p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Then, the short video has become the main way to propagate the music, and the allocation of resources in the music industry has shifted accordingly.</h3>
+                    <p>In the past, the musicians promote their new song mainly depending on radio, variety shows, and streaming charts, but now they pay more attention to the volume of Douyin plays and the popularity of topics. According to the survey, more than half of entertainment company practitioners think that short video platforms are the most effective media channels for promoting songs at present (woshipm.com) The explosion in short time also accelerates the life of the music. Music that is explosive in Douyin like youth (《少年》), Answer (《答案》) and Green (《绿色》) have all lose their heat at all. This shows the tendency of popular music to become fast-moving consumer goods driven by algorithms.</p>
+                </div>
+                
+                <div class="summary-box">
+                    <p>All in all, Douyin algorithm reshape many musicians’ creation ecology: It encourages new creation way and promotion way, not only engaging more people in music creation, but also bringing the problems of content convergence and uneven quality. How to balance algorithm efficiency and music diversity may be an important proposition that the Chinese pop music industry needs to think about in the future.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="east-asia-comparison" class="article-section">
+            <div class="section-header">
+                <h2>Comparison of the “fragment-first” trend in East Asian popular music</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="content">
+                <p>In east Asia, platforms like TikTok in Japan, Instagram Reels in Korea also lead a new tendency of the “fragment-first”.</p>
+                
+                <div class="subsection">
+                    <h3>Japan:</h3>
+                    <p>After the J-pop market entered the TikTok era, there have been many cases of short video clips becoming popular. One famous example is Perfume by independent singer Eito. The music was originally unknown, but it became popular in 2020 because its chorus clips were widely spread on TikTok. (Eito’s Perfume). Young users in TikTok cover the chorus part by short video, in which way the music was spread quickly. Perfume finally topped the Japanese Billboard chart and Eito was invited to TV shows to perform. The case reflects the power of fragmented platforms to feed back the traditional music. Similarly, the YOASOBI band's "夜に駆ける", became popular through TikTok's secondary creation and illustration videos in 2019-2020. （夜に駆ける）In addition, Japan record companies also focused on preheating, such as releasing chorus and asking Internet Celebrities to dance to promote music. If the feedback is hot, they will release the entire song. Such approach is similar to the idea of cultivating hits on Douyin in China.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Korea:</h3>
+                    <p>K-pop is famous for its highlight dance. In short video era, K-pop company extract the most memorable part and launch dance challenges through TikTok or Instagram Reels. For example, when singer Zico's Any Song was released in 2020, he planned a challenge #AnySongChallenge, inviting many artists and Internet celebrities to perform the chorus dance steps in short videos. (TikTok example) Another example is BTS's Dynamite clip dance （TikTok example）. They stimulated the public's interest through short video dance clips (other people’s view), which is same as Chinese Douyin’s dance challenge.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="article-section">
+            <div class="section-header">
+                <h2>Conclusion</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="content">
+                <p>In summary, Douyin pop music reflects the shift in the creation and promotion of pop music in the era of short videos. In music languages, these hooks use highly patterned harmony, melody loops, rhythmic beats and repeated lyrics. However, the promotion powered by Douyin algorithm bring a double-edged sword: on one hand, Douyin provide a platform and chance for new creators and colorful style, the promotion of music is easier than before. On the other hand, following the algorithm and fragmented promotion also cause the worry of this industry about music equality and originality. For music creators, they should balance their music’s art and short period promotion. For music industry, establishing a mechanism to support high-quality content instead of just chasing traffic is important. I hope this report can bring you a new insight on the short video pop music.</p>
+            </div>
+        </section>
+
+        <section id="references" class="article-section">
+            <div class="section-header">
+                <h2>Reference</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="content">
+                <ul class="reference-list">
+                    <li>中国新闻周刊. (2022, February 14). The anchor is singing Douyin pop music [Data set]. 中国新闻周刊. Retrieved from <a href="https://www.inewsweek.cn/survey/2022-02-14/15052.shtml" target="_blank">https://www.inewsweek.cn/survey/2022-02-14/15052.shtml</a></li>
+                    <li>Graitzer, A., Katorza, A., & Gabbay, D. (2021, November 11). Is there a magic formula to TikTok song success? AI analysis shows. Music Ally. Retrieved from <a href="https://musically.com/2021/11/11/magic-formula-tiktok-song-success-ai-analysis/" target="_blank">https://musically.com/2021/11/11/magic-formula-tiktok-song-success-ai-analysis/</a></li>
+                    <li>宛其. (2020, December 24). 抖音神曲“爆款”后，生命周期急剧缩短 [Blog post]. 人人都是产品经理. Retrieved from <a href="https://www.woshipm.com/operate/5117703.html" target="_blank">https://www.woshipm.com/operate/5117703.html</a></li>
+                    <li>People’s Daily. (2019, January 6). Douyin 2019 data report [Data set]. China Daily. Retrieved from <a href="https://cn.chinadaily.com.cn/a/202001/06/WS5e12f2b5a31099ab995f5145.html" target="_blank">https://cn.chinadaily.com.cn/a/202001/06/WS5e12f2b5a31099ab995f5145.html</a></li>
+                    <li>Yoshida, T. (2021). TikTok and the renaissance of “clip culture” in Japan. Journal of Popular Music Studies, 33(4), 465–483. <a href="https://doi.org/10.1525/jpms.2021.33.4.465" target="_blank">https://doi.org/10.1525/jpms.2021.33.4.465</a></li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sections = document.querySelectorAll('.article-section');
+
+            sections.forEach(section => {
+                const header = section.querySelector('.section-header');
+                const content = section.querySelector('.content');
+                const icon = header.querySelector('.toggle-icon');
+
+                header.addEventListener('click', () => {
+                    const isExpanded = section.classList.contains('expanded');
+
+                    // Optional: Close other sections when one is opened (accordion behavior)
+                    // To enable, uncomment the following lines:
+                    // if (!isExpanded) {
+                    //     sections.forEach(s => {
+                    //         if (s !== section && s.classList.contains('expanded')) {
+                    //             s.classList.remove('expanded');
+                    //             s.querySelector('.content').style.maxHeight = null;
+                    //              s.querySelector('.toggle-icon').textContent = '+';
+                    //              s.querySelector('.toggle-icon').style.transform = 'rotate(0deg)';
+                    //         }
+                    //     });
+                    // }
+                    
+                    section.classList.toggle('expanded');
+                    
+                    if (section.classList.contains('expanded')) {
+                        icon.textContent = '+'; // Character for 'x' or minus, '+' rotated looks like x
+                        icon.style.transform = 'rotate(45deg)';
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    } else {
+                        icon.textContent = '+';
+                        icon.style.transform = 'rotate(0deg)';
+                        content.style.maxHeight = null;
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
